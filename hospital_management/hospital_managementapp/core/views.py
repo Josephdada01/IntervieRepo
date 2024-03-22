@@ -54,3 +54,22 @@ class AppointmentAPIView(generics.ListCreateAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect based on user role
+            if user.is_doctor:
+                return redirect('doctor_dashboard')
+            else:
+                return redirect('patient_dashboard')
+        else:
+            # Invalid login
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    else:
+        return render(request, 'login.html')
