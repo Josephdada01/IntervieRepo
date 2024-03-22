@@ -16,7 +16,7 @@ class Doctor(models.Model):
 
 class Patient(models.Model):
     """A class that defines the Patient"""
-    user = models.OnToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     email = models.EmailField()
     phone = models.IntegerField()
@@ -31,10 +31,10 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     appointment_time = models.DateTimeField()
-    duration_minutes = models.PositiveIntegerField(default=30)  # Duration of the appointment in minutes
-    notes = models.TextField(blank=True, null=True)  # Additional notes for the appointment
-    is_confirmed = models.BooleanField(default=False)  # Whether the appointment is confirmed
-    is_completed = models.BooleanField(default=False)  # Whether the appointment is completed
-    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the appointment was created
-    updated_at = models.DateTimeField(auto_now=True)  # Timestamp for when the appointment was last updated
+    duration_minutes = models.PositiveIntegerField(default=30)  
+    notes = models.TextField(blank=True, null=True)  
+    is_confirmed = models.BooleanField(default=False)  
+    is_completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)  
+    updated_at = models.DateTimeField(auto_now=True)
 
