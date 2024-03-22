@@ -1,7 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    is_doctor = models.BooleanField(default=False)
+
 class Doctor(models.Model):
     """A class that define the Doctors model"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -13,7 +18,6 @@ class Doctor(models.Model):
         """returning the string representation"""
         return self.name
 
-
 class Patient(models.Model):
     """A class that defines the Patient"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,6 +28,7 @@ class Patient(models.Model):
     def __str__(self):
         """returnin the string representation of Patient"""
         return self.name
+
     
 
 class Appointment(models.Model):

@@ -1,32 +1,56 @@
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import generics
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
+from .forms import DoctorSignUpForm, PatientSignUpForm
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
+from core.serializers import DoctorSerializer, PatientSerializer, AppointmentSerializer
 from .models import Doctor, Patient, Appointment
-from core.serialiazers import DoctorSerializer, PatientSerializer, AppointmentSerializer
+
+class DoctorSignUpAPIView(APIView):
+    """
+    API endpoint for doctor signup
+    """
+    def post(self, request):
+        form = DoctorSignUpForm(request.data)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PatientSignUpAPIView(APIView):
+    """
+    API endpoint for patient signup
+    """
+    def post(self, request):
+        form = PatientSignUpForm(request.data)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DoctorAPIView(generics.ListCreateAPIView):
     """
-    Specifies the model to serialize 
+    API endpoint to list and create doctors
     """
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
 
 class PatientAPIView(generics.ListCreateAPIView):
     """
-    Specifies the model to serialize 
-    Specifies that all fields of the Patient
+    API endpoint to list and create patients
     """
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
 
 class AppointmentAPIView(generics.ListCreateAPIView):
+    """
+    API endpoint to list and create appointments
+    """
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    """
-    Specifies the model to serialize 
-    Specifies that all fields of the Apointment 
-    only authenticated user can access the view
-    """
     permission_classes = [IsAuthenticated]
