@@ -27,7 +27,7 @@ class Patient(models.Model):
     
 
 class Appointment(models.Model):
-    """A class for the appointment"""
+    """A class for the appoiintment"""
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     appointment_time = models.DateTimeField()
