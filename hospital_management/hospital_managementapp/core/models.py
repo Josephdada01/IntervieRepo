@@ -2,21 +2,26 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
+
 
 class User(AbstractUser):
     is_doctor = models.BooleanField(default=False)
+    groups = models.ManyToManyField(Group, related_name='core_users')
+    user_permissions = models.ManyToManyField(Permission, related_name='core_users')
+
 
 class Doctor(models.Model):
     """A class that define the Doctors model"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     email = models.EmailField()
-    phone = models.IntegerField()
+    phone = models.CharField(max_length=15)
 
     def __str__(self):
         """returning the string representation"""
         return self.name
+    
 
 class Patient(models.Model):
     """A class that defines the Patient"""

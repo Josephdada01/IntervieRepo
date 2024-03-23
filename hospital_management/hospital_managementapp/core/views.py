@@ -14,13 +14,12 @@ class DoctorSignUpAPIView(APIView):
     API endpoint for doctor signup
     """
     def post(self, request):
-        form = DoctorSignUpForm(request.data)
+        form = DoctorSignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return Response(status=status.HTTP_201_CREATED)
+            return Response({'user_id': user.id}, status=status.HTTP_201_CREATED)
         return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class DoctorAPIView(generics.ListCreateAPIView):
     """
@@ -44,21 +43,18 @@ class AppointmentAPIView(generics.ListCreateAPIView):
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
-
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # Redirect based on user role
             if user.is_doctor:
                 return redirect('doctor_dashboard')
             else:
                 return redirect('patient_dashboard')
         else:
-            # Invalid login
             return render(request, 'login.html', {'error': 'Invalid username or password'})
     else:
         return render(request, 'login.html')
