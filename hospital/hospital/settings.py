@@ -15,12 +15,12 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-AUTH_USER_MODEL = 'appointment.User'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=0%&6^ro$lb!*=c@4w$$krs!##_*iz8d9pobaj#zcxqq8j%+yu'
+SECRET_KEY = 'django-insecure-#zl12)(v-3@$3n=&@2b4^7p0o-p1)y$z^sp2@l&j%)zjdtg05t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

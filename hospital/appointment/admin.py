@@ -1,14 +1,14 @@
 from django.contrib import admin
-
-# Register your models here.
-from .models import Doctor, Appointment
-
-from django.contrib import admin
-from .models import Doctor, Appointment
+from .models import Doctor, Appointment, Patient
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
     list_display = ('title', 'first_name', 'last_name', 'email', 'phone_number')
+    search_fields = ('first_name', 'last_name', 'email', 'phone_number')
+
+@admin.register(Patient)
+class PatientAdmin(admin.ModelAdmin):
+    list_display = ( 'first_name', 'last_name', 'email', 'phone_number')
     search_fields = ('first_name', 'last_name', 'email', 'phone_number')
 
 class AppointmentAdmin(admin.ModelAdmin):
