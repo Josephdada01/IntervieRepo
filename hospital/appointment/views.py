@@ -11,6 +11,7 @@ def index(request):
     """index function"""
     return render(request, 'index.html')
 
+
 def doctor_signup(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -48,7 +49,7 @@ def doctor_signup(request):
 
     return render(request, 'doctor_signup.html')
 
-def login_view(request):
+def doctor_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
