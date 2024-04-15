@@ -33,6 +33,7 @@ def doctor_signup(request):
         user = User.objects.create_user(email=email, username=username, password=password)
         if user:
             user.is_active = True
+            user.is_doctor = True
             user.save()
             messages.success(request, "Account created and logged in successfully")
             # Log in the user
@@ -49,6 +50,7 @@ def doctor_signup(request):
 
     return render(request, 'doctor_signup.html')
 
+
 def doctor_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -57,7 +59,7 @@ def doctor_login(request):
         # Authenticate user
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
+        if user is not None and user.is_doctor:
             # User is authenticated, log them in
             # login(request, user)
             messages.success(request, " successful!")
@@ -69,36 +71,48 @@ def doctor_login(request):
 
     return render(request, 'doctor_login.html')
 
-"""
-def doctor_signup(request):
+
+@login_required
+def register_patient(request):
     if request.method == 'POST':
+        # Get form data
         email = request.POST.get('email')
         username = request.POST.get('username')
+
+        # Check if the username or email already exists
+        if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
+            messages.error(request, "This username or email is already taken.")
+            return render(request, 'register_patient.html')
+
+        # Create the patient account
+        user = User.objects.create_user(email=email, username=username)
+        user.is_patient = True  # Mark the user as a patient
+        user.is_active = True
+        user.save()
+
+        messages.success(request, "Patient account created successfully.")
+        return redirect('dashboard')  # Redirect to the dashboard or any other page
+
+    return render(request, 'register_patient.html')
+
+
+def patient_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
         password = request.POST.get('password')
-        custom_id = request.POST.get('custom_id')
 
-        if custom_id != "Doctor":
-            messages.error(request, "You are not our staff yet")  
-            return render(request, 'doctor_signup.html')
+        # Authenticate the user
+        user = authenticate(username=username, password=password)
 
-        # Check if the user with the provided email already exists
-        if User.objects.filter(email=email).exists():
-            messages.info(request, "An account with this email already exists. Please log in.")
-            return render(request, 'doctor_signup.html')
-
-        # Create the user
-        user = User.objects.create_user(email=email, username=username, password=password, custom_id=custom_id)
-        if user:
-            user.is_active = True
-            user.save()
-            messages.success(request, "Account created and logged in successfully")
-            return redirect('doctor_dashboard')
+        if user is not None and user.is_patient:
+            # Login the user
+            login(request, user)
+            messages.success(request, "Logged in successfully.")
+            return redirect('patient_dashboard.html')  # Redirect to the patient dashboard or any other page
         else:
-            messages.error(request, "Failed to create an account. Please try again.")
-            return render(request, "doctor_signup.html")
+            messages.error(request, "Invalid username or password.")
 
-    return render(request, 'doctor_signup.html')
-"""
+    return render(request, 'patient_login.html')
 
 @login_required
 def doctor_dashboard(request):
