@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from appointment.models import Doctor
+from math import ceil
 
 # Create your views here.
 def index(request):
@@ -161,8 +163,48 @@ def doctor_dashboard(request):
 @login_required
 def patient_dashboard(request):
     if request.user.is_authenticated: #and request.user.is_patient:
-        return render(request, 'patient_dashboard.html')
+        alldoctors = []
+        catdoctors = Doctor.objects.values('category')
+        cats = {item['category'] for item in catdoctors}
+        for cat in cats:
+            doc = Doctor.objects.filter(category=cat)
+            n = len(doc)
+            nSlides = n // 4 + ceil((n / 4) - (n // 4))
+            alldoctors.append([doc, range(1, nSlides), nSlides])
+
+        params = {'alldoctors': alldoctors}  # Parameters to be passed to the template
+        return render(request, 'patient_dashboard.html', params)
     else:
         # Redirect or show an error message if the user is not authenticated or not a doctor
         messages.warning(request, "Login & Try Again")
+
+
+def schedule_appointment(request):
+    """Scheduling views"""
+    return render(request, 'schedule_appointment.html')
+
+
+"""
+@login_required
+def patient_dashboard(request):
+    if request.user.is_authenticated: #and request.user.is_patient:
+        alldoctors = []
+        catdoctors = Doctor.objects.values('category')
+        cats = {item['category'] for item in catdoctors}
+        for cat in cats:
+            doc = Doctor.objects.filter(category=cat)
+            n = len(doc)
+            nSlides = n // 4 + ceil((n / 4) - (n // 4))
+            alldoctors.append([doc, range(1, nSlides), nSlides])
+
+        params = {'allprods': alldoctors}  # Parameters to be passed to the template
+        return render(request, 'patient_dashboard.html', params=params)
+    else:
+        # Redirect or show an error message if the user is not authenticated or not a doctor
+        messages.warning(request, "Login & Try Again")
+
+
+        # Logic to retrieve products and organize them for display
+    
         return redirect('/patient_login.html')
+"""

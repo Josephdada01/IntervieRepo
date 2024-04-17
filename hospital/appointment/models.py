@@ -14,8 +14,10 @@ class Doctor(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=20, default="")
     description = models.TextField(max_length=1000, default="", help_text="Enter a brief description of the doctor")
+    image = models.ImageField(upload_to='images/images', default="")  # Image of the doctor
+    category = models.CharField(max_length=50, default="")  # Category of the doctor
 
-
+    
     def get_absolute_url(self):
         """Returns the URL to access a detail record for this book."""
         return reverse('doctor-detail', args=[str(self.id)])

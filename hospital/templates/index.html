@@ -1,22 +1,86 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hospital</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        body {
+            background-color: #001f3f; /* Deep blue color */
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .header-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .jumbotron {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            color: #495057;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Our Hospital</h1>
-    <button style="padding: 10px 20px; background-color: #007bff; color: #ffffff; border: none; border-radius: 5px; font-size: 16px;">
-        <a href="/doctor_signup" style="text-decoration: none; color: inherit;">Doctor Sign Up</a>
-    </button>
-    <button style="padding: 10px 20px; background-color: #007bff; color: #ffffff; border: none; border-radius: 5px; font-size: 16px;">
-        <a href="/patient_login" style="text-decoration: none; color: inherit;">patient login here</a>
-    </button>
-    <button style="padding: 10px 20px; background-color: #007bff; color: #ffffff; border: none; border-radius: 5px; font-size: 16px;">
-        <a href="/doctor_login" style="text-decoration: none; color: inherit;">doctor login here</a>
-    </button>
+
+<!-- Header -->
+<div class="container">
+    <div class="row justify-content-between align-items-center mb-4">
+        <div class="col-md-4">
+            <h1>Interview Hospital</h1>
+        </div>
+        <div class="col-md-8 text-right">
+            <button onclick="window.location.href='/patient_login'" type="button" class="btn btn-primary mr-2">Patient Login</button>
+            <button onclick="window.location.href='/doctor_signup'" type="button" class="btn btn-primary mr-2">Doctor Sign up</button>
+            <button onclick="window.location.href='/doctor_login'" type="button" class="btn btn-primary mr-2">Doctor Login</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Section -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="jumbotron">
+                <h2>Welcome to Our Hospital</h2>
+                <p>We are committed to providing exceptional healthcare services to our patients. With our team of experienced doctors and staff, we strive to deliver the highest standard of care and comfort.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Us Section -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="jumbotron">
+                <h2>About Us</h2>
+                <p>Welcome to Our Hospital! We are committed to providing exceptional healthcare services to our patients. With our team of experienced doctors and staff, we strive to deliver the highest standard of care and comfort.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container text-center">
+        <p>&copy; 2024  Hospital. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

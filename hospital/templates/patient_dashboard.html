@@ -1,3 +1,4 @@
+{% load static  %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,28 @@
     <title>Patient dashboard</title>
 </head>
 <body>
+    <script src="{% static 'js/main.js' %}"></script>
     <h1>Patient Dashboard</h1>
+    <div class="container">
+        {% for doctors, _, _ in alldoctors %}
+        <h3>{{ doctors.0.category }} Section</h3>
+        <div class="row">
+            {% for doctor in doctors %}
+            <div class="col-md-3 mt-3">
+                <div class="card">
+                    <img src="{{ doctor.image.url }}" class="card-img-top" alt="{{ doctor.first_name }} {{ doctor.last_name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ doctor.title }} {{ doctor.first_name }} {{ doctor.last_name }}</h5>
+                        <p class="card-text">{{ doctor.description }}</p>
+                        <p class="card-text">Email: {{ doctor.email }}</p>
+                        <p class="card-text">Phone: {{ doctor.phone_number }}</p>
+                        <a href="{% url 'schedule_appointment' doctor.id %}" class="btn btn-primary">Schedule Appointment</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
 </body>
 </html>
