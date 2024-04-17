@@ -5,8 +5,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from appointment.models import Doctor
+from appointment.models import Doctor, Appointment
 from math import ceil
+from .forms import AppointmentForm
+from django.shortcuts import get_object_or_404
+
+
+
 
 # Create your views here.
 def index(request):
@@ -149,6 +154,7 @@ def patient_login(request):
 
     return render(request, 'patient_login.html')
 
+
 @login_required
 def doctor_dashboard(request):
     if request.user.is_authenticated: #and user.is_patient:
@@ -179,12 +185,49 @@ def patient_dashboard(request):
         messages.warning(request, "Login & Try Again")
 
 
-def schedule_appointment(request):
-    """Scheduling views"""
-    return render(request, 'schedule_appointment.html')
+def schedule_appointment(request, doctor_id):
+    doctor = get_object_or_404(Doctor, doctor_id=doctor_id)  # Ensure doctor exists
+    
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.doctor = doctor  # Assign the doctor
+            appointment.patient = request.user.patient  # Assign the patient
+            appointment.save()
+            return redirect('appointment_confirmation')  # Redirect to a confirmation page
+    else:
+        # Pre-fill the form with doctor and patient information
+        form = AppointmentForm(initial={'doctor': doctor, 'patient': request.user.patient})
+    
+    return render(request, 'schedule_appointment.html', {'form': form, 'doctor': doctor})
+
+def appointment_confirmation(request):
+    return (request, 'appointment_confirmation')
+
+"""
+def schedule_appointment(request, doctor_id):
+
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save(commit=False)
+            appointment.patient = request.user.patient  # Assuming patient is the currently logged-in user
+            appointment.save()
+            return redirect('appointment_confirmation')  # Redirect to a confirmation page
+    else:
+        # Pre-fill the form with doctor and patient information
+        doctor = Doctor.objects.get(doctor_id=doctor_id)
+        form = AppointmentForm(initial={'doctor': doctor, 'patient': request.user.patient})
+    
+    return render(request, 'schedule_appointment.html', {'form': form})
+
+
 
 
 """
+"""
+
 @login_required
 def patient_dashboard(request):
     if request.user.is_authenticated: #and request.user.is_patient:

@@ -3,11 +3,18 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.contrib.auth.models import User
+import uuid
 # Create your models here.
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    doctor_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                          help_text="Unique ID for this particular doctor across whole hospital")
+    #user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    #doctor_id = models.CharField(max_length=36, unique=True, default="")
     title = models.CharField(max_length=10, default="")
     first_name = models.CharField(max_length=100, default="")
     last_name = models.CharField(max_length=100, default="")
@@ -26,7 +33,9 @@ class Doctor(models.Model):
         return f"{self.title} {self.first_name} {self.last_name}"
 
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    patient_id = models.UUIDField(primary_key=True, default=uuid.uuid4,
+                          help_text="Unique ID for this particular doctor across whole hospital")
     first_name = models.CharField(max_length=100, default="")
     last_name = models.CharField(max_length=100, default="")
     email = models.EmailField()

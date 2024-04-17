@@ -22,7 +22,7 @@
                         <p class="card-text">{{ doctor.description }}</p>
                         <p class="card-text">Email: {{ doctor.email }}</p>
                         <p class="card-text">Phone: {{ doctor.phone_number }}</p>
-                        <a href="{% url 'schedule_appointment' doctor.id %}" class="btn btn-primary">Schedule Appointment</a>
+                        <a href="{% url 'schedule_appointment' doctor.doctor_id %}" class="btn btn-primary">Schedule Appointment</a>
                     </div>
                 </div>
             </div>
